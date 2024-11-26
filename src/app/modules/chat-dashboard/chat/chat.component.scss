@@ -1,0 +1,31 @@
+/* Estilos para el dropdown de búsqueda */
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+  
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+}
+  
+.dropdown-menu button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    text-align: left;
+}
+  
+.dropdown-menu button:hover {
+    background-color: #f1f1f1;
+}
+  

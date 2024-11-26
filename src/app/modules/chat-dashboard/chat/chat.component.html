@@ -1,0 +1,141 @@
+<div class="flex h-screen">
+  <!-- Barra lateral con información del usuario y chats -->
+  <div class="flex flex-col pl-6 pr-2 w-64 bg-white flex-shrink-0">
+    <div class="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
+      <!-- Avatar y estado del usuario -->
+      <div class="h-20 w-20 rounded-full border overflow-hidden">
+        <img [src]="currentUser?.profilePictureUrl" alt="Avatar" class="h-full w-full" />
+      </div>
+      <div class="text-sm font-semibold mt-2">{{ currentUser?.names }}</div>
+      <div class="text-xs text-gray-500">{{ currentUser?.username }}</div>
+      <div class="relative inline-block text-left">
+        <div class="flex flex-row items-center mt-3 cursor-pointer" (click)="toggleDropdown()">
+          <span
+            class="text-xs font-medium me-2 px-2.5 py-0.5 rounded-full"
+            [ngClass]="stateBadge(currentUser?.userStatus?.status).badgeClass"
+          >
+            {{ stateBadge(currentUser?.userStatus?.status).icon }} {{ translateUserStatus(currentUser!.userStatus.status) }}
+          </span>
+        </div>
+        <!-- Dropdown de estados -->
+        <div
+          *ngIf="dropdownOpen"
+          class="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+        >
+          <ul class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="menu-opciones">
+            <li
+              *ngFor="let status of userStatusesList"
+              class="cursor-pointer px-4 py-2 text-sm hover:bg-gray-100"
+              (click)="changeStatus(status)"
+            >
+              <span class="flex items-center" [ngClass]="stateBadge(status).badgeClass">
+                {{ stateBadge(status).icon }} {{ translateUserStatus(status) }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Mensaje de estado y opción de editar -->
+      <div class="flex flex-col items-center mt-2">
+        <div
+          *ngIf="!isEditing"
+          (click)="toggleEdit()"
+          class="is-editing border rounded-md p-2 mb-2 w-full cursor-pointer"
+        >
+          <p
+            class="text-sm"
+            title="Actualiza tu mensaje de estado"
+          >
+            {{ currentUser?.userStatus?.message || 'Haz clic para editar el mensaje de estado' }}
+          </p>
+        </div>
+        <textarea
+          #messageInput
+          *ngIf="isEditing"
+          rows="3"
+          [value]="currentUser?.userStatus?.message || ''"
+          (input)="onMessageInput($event)"
+          (click)="$event.stopPropagation()"
+          class="border rounded-md p-2 mb-2 w-full"
+        ></textarea>
+        <div class="flex flex-row justify-center">
+          <button
+            *ngIf="isEditing"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            (click)="updateMessage()"
+          >Actualizar</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Entrada de búsqueda -->
+    <div class="flex flex-row justify-between items-center mt-4">
+      <input
+        class="w-full px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        placeholder="Buscar chats o contactos..."
+        type="search"
+        (input)="onSearch($event)"
+      />
+    </div>
+
+    <!-- Resultados de la búsqueda -->
+    <div
+      *ngIf="showSearchResults"
+      class="mt-4 bg-white rounded-md shadow-lg max-h-48 overflow-y-auto"
+    >
+      <!-- Chats -->
+      <div class="p-2">
+        <h5 class="text-sm font-bold text-gray-500">Chats</h5>
+        <ng-container *ngIf="filteredChats.length; else noChats">
+          <button
+            *ngFor="let chat of filteredChats"
+            (click)="selectChat(chat)"
+            class="w-full flex items-center p-2 hover:bg-gray-100 rounded-md"
+          >
+            <div
+              *ngIf="chat.chatMembers"
+              class="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full"
+            >
+              {{ chat.chatMembers[0].user?.names?.charAt(0) }}
+            </div>
+            <div *ngIf="chat.chatMembers" class="ml-2 text-sm">{{ chat.chatMembers[0].user?.names }}</div>
+          </button>
+        </ng-container>
+        <ng-template
+          #noChats
+        >
+          <p class="text-sm text-gray-400">No se encontraron chats.</p>
+        </ng-template>
+      </div>
+      <!-- Contactos -->
+      <div class="p-2">
+        <h5 class="text-sm font-bold text-gray-500">Contactos</h5>
+        <ng-container *ngIf="filteredContacts.length; else noContacts">
+          <button
+            *ngFor="let contact of filteredContacts"
+            (click)="createChat(contact)"
+            class="w-full flex items-center p-2 hover:bg-gray-100 rounded-md"
+          >
+            <div class="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+              {{ contact.contactUser?.names?.charAt(0) }}
+            </div>
+            <div class="ml-2 text-sm">{{ contact.contactUser?.names }}</div>
+          </button>
+        </ng-container>
+        <ng-template
+          #noContacts
+        >
+          <p class="text-sm text-gray-400">No se encontraron contactos.</p>
+        </ng-template>
+      </div>
+    </div>
+    <div style="z-index: 100;" *ngIf="filteredContacts.length > 0" class="flex flex-col mt-8">
+      <app-recent-chats/>
+    </div>
+  </div>
+
+  <!-- Chat privado -->
+  <div class="flex-grow bg-white ">
+    <app-chat-private [selectedChat]="selectedChat"/>
+  </div>
+</div>

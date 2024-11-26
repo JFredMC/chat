@@ -1,0 +1,21 @@
+.sidebar {
+    @apply flex flex-col items-center justify-between py-6 bg-gray-800 text-white;
+    width: 4rem;
+  
+    .sidebar-icon {
+      @apply flex items-center justify-center h-12 w-12 rounded-full cursor-pointer transition-colors;
+  
+      &:hover {
+        @apply bg-gray-700;
+      }
+  
+      img {
+        @apply h-10 w-10 rounded-full;
+      }
+    }
+  
+    .group:hover svg {
+      @apply text-white;
+    }
+  }
+  

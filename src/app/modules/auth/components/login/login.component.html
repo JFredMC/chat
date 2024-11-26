@@ -1,0 +1,75 @@
+<div class="flex flex-col items-center justify-center h-screen gap-8">
+  <div class="w-full max-w-md">
+    <form [formGroup]="loginForm">
+    <div class="space-y-4">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold">Iniciar sesión</h1>
+      </div>
+      <div class="rounded-lg border">
+        <div class="flex items-center justify-between border-b px-6 py-4">
+          <div class="text-sm font-medium text-primary">Nombre de usuario y contraseña</div>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="space-y-2">
+            <label class="text-sm font-medium leading-none" for="username">Nombre de usuario</label>
+            <div class="flex space-x-2">
+              <!-- Input para el nombre de usuario -->
+              <input
+                class="flex-grow rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                id="username"
+                formControlName="username"
+                name="username"
+                placeholder="Nombre de usuario..."
+                type="text"
+              />
+            </div>
+            <div
+              *ngIf="isValidField('username')"
+              class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert"
+          >
+            <span  class="font-medium">
+              {{ getFieldError('username') }}
+            </span>
+          </div>
+            <label class="text-sm font-medium leading-none" for="phone">Contraseña</label>
+            <div class="flex space-x-2">
+              <!-- Input para el nombre de usuario -->
+              <input
+                class="flex-grow rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                id="password"
+                formControlName="password"
+                name="password"
+                placeholder="Contraseña..."
+                type="password"
+              />
+            </div>
+          </div>
+          <div
+              *ngIf="isValidField('password')"
+              class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert"
+          >
+            <span  class="font-medium">
+              {{ getFieldError('password') }}
+            </span>
+          </div>
+          <button
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+            type="button"
+            (click)="login()"
+          >
+            Iniciar Sesion
+          </button>
+          <p class="text-muted-foreground">¿Aun no tienes una cuenta?
+            <a
+              routerLink="/auth/register"
+              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2"
+            >
+              Registrate
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>

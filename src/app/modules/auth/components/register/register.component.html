@@ -1,0 +1,186 @@
+<div class="flex flex-col items-center justify-center h-screen gap-8">
+    <div class="w-full max-w-md">
+      <form [formGroup]="loginForm">
+      <!-- Step 1: Ingresar número de teléfono -->
+      <div *ngIf="currentStep === 1" class="space-y-4">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold">Bienvenidos</h1>
+        </div>
+        <div class="rounded-lg border">
+          <div class="flex items-center justify-between border-b px-6 py-4">
+            <div class="text-sm font-medium text-primary">Introduce tu nombre completo para empezar</div>
+            <div class="text-sm font-medium text-primary">1/3</div>
+          </div>
+          <div class="p-6 space-y-4">
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none" for="phone">Nombres</label>
+              <div class="flex space-x-2">
+                <!-- Input para el nombre -->
+                <input
+                  class="flex-grow rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  id="names"
+                  formControlName="names"
+                  name="names"
+                  placeholder="Nombres..."
+                  type="text"
+                />
+              </div>
+              <div
+                  *ngIf="isValidField('names')"
+                  class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert"
+              >
+                <span  class="font-medium">
+                  {{ getFieldError('names') }}
+                </span>
+              </div>
+            </div>
+            <button
+              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              type="button"
+              (click)="goToNextStep()"
+            >
+            Siguiente
+            </button>
+            <p class="text-muted-foreground">¿Ya tienes una cuenta?
+                <a
+                    routerLink="/auth/login"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2"
+                >
+                  Inicia sesión
+                </a>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+  
+      <!-- Step 2: Ingresar OTP -->
+      <div *ngIf="currentStep === 2" class="space-y-4">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold">completa tu perfil</h1>
+        </div>
+        <div class="rounded-lg border">
+          <div class="flex items-center justify-between border-b px-6 py-4">
+            <div class="text-sm font-medium text-primary">Nombre de usuario y contraseña</div>
+            <div class="text-sm font-medium text-primary">2/3</div>
+          </div>
+          <div class="p-6 space-y-4">
+            <div class="space-y-2">
+              <label class="text-sm font-medium leading-none" for="phone">Nombre de usuario</label>
+              <div class="flex space-x-2">
+                <!-- Input para el nombre de usuario -->
+                <input
+                  class="flex-grow rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  id="username"
+                  formControlName="username"
+                  name="username"
+                  placeholder="Nombre de usuario..."
+                  type="text"
+                />
+              </div>
+              <div
+                *ngIf="isValidField('username')"
+                class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert"
+            >
+              <span  class="font-medium">
+                {{ getFieldError('username') }}
+              </span>
+            </div>
+              <label class="text-sm font-medium leading-none" for="phone">Contraseña</label>
+              <div class="flex space-x-2">
+                <!-- Input para el nombre de usuario -->
+                <input
+                  class="flex-grow rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  id="password"
+                  formControlName="password"
+                  name="password"
+                  placeholder="Contraseña..."
+                  type="password"
+                />
+              </div>
+            </div>
+            <div
+                *ngIf="isValidField('password')"
+                class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert"
+            >
+              <span  class="font-medium">
+                {{ getFieldError('password') }}
+              </span>
+            </div>
+            <button
+              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              type="button"
+              (click)="goToNextStep()"
+            >
+              Siguiente
+            </button>
+            <p class="text-muted-foreground">¿Escribiste mal tu nombre?
+              <button
+                (click)="goToPreviousStep()"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none h-10 px-4 py-2"
+              >
+                Regresar
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Step 3: Completar perfil -->
+      <div *ngIf="currentStep === 3" class="space-y-4">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold">Completa tu perfil</h1>
+        </div>
+        <div class="rounded-lg border">
+          <div class="flex items-center justify-between border-b px-6 py-4">
+            <div class="text-sm font-medium text-primary">Seleccione una foto de perfil</div>
+            <div class="text-sm font-medium text-primary">3/3</div>
+          </div>
+          <div class="p-6 space-y-4">
+            <div class="space-y-2">
+              <img 
+                [src]="imageUrl ? imageUrl : '/img/defaultProfilePicture.png'" 
+                alt="User Image" 
+                class="img-fluid img-thumbnail rounded-circle mx-auto d-block" 
+                id="userImage" 
+                loading="lazy"
+              >
+              <label
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                for="username"
+              >
+                Foto de perfil
+              </label>
+              <input
+                #fileInput
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="profilePictureFile"
+                formControlName="profilePictureFile"
+                name="profilePictureFile"
+                placeholder="Foto de perfil..."
+                accept="image/*"
+                type="file"
+                (change)="onSelectImage($event)"
+              />
+            </div>
+            <div
+                *ngIf="isValidField('username')"
+                class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert"
+            >
+              <span  class="font-medium">
+                {{ getFieldError('username') }}
+              </span>
+            </div>
+            <button
+              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              type="button"
+              (click)="goToNextStep()"
+            >
+            Registrarse
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
